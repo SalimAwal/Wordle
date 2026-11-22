@@ -1,0 +1,159 @@
+/* Colours are tokens, so the whole palette is changed in one place.
+   Letters on green and yellow are DARK: white fails WCAG contrast there. */
+:root {
+  --bg: #161a22;
+  --panel: #232938;
+  --line: #3b4357;
+  --text: #eef1f7;
+  --muted: #a9b2c6;
+  --correct: #86d28f;
+  --present: #f0c75e;
+  --absent: #4a5160;
+  --dark-text: #10231a;
+  --key: #8b94aa;
+  font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.game {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+h1 {
+  margin: 0.25rem 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.4rem;
+  letter-spacing: 0.04em;
+}
+
+/* Status line: always on the page, only its text changes (live region). */
+.status {
+  margin: 0;
+  min-height: 2.8rem;
+  max-width: 100%;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.status-won { color: var(--correct); font-weight: bold; }
+.status-lost { color: var(--present); font-weight: bold; }
+
+/* Board ------------------------------------------------------------- */
+.board { display: grid; gap: 0.4rem; }
+.row { display: flex; gap: 0.4rem; }
+
+.tile {
+  width: 3.6rem;
+  height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: 2px solid var(--line);
+  border-radius: 0.3rem;
+}
+.tile-filled { border-color: var(--muted); }
+
+/* Second cue besides colour: border style and a corner mark. */
+.tile-correct {
+  background: var(--correct);
+  color: var(--dark-text);
+  border: 3px solid var(--dark-text);
+}
+.tile-present {
+  background: var(--present);
+  color: var(--dark-text);
+  border: 3px dashed var(--dark-text);
+}
+.tile-absent {
+  background: var(--absent);
+  color: var(--text);
+  border-color: var(--absent);
+}
+.tile-correct, .tile-present, .tile-absent {
+  animation: reveal 0.35s ease backwards;
+}
+@keyframes reveal {
+  from { transform: rotateX(90deg); }
+  to { transform: rotateX(0); }
+}
+
+/* Keyboard ---------------------------------------------------------- */
+.keyboard { display: grid; gap: 0.4rem; width: 100%; }
+.keyboard-row { display: flex; justify-content: center; gap: 0.3rem; }
+
+.key {
+  flex: 1;
+  max-width: 2.6rem;
+  height: 3.4rem;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 0.3rem;
+  background: var(--key);
+  color: var(--dark-text);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+.key-wide { flex: 1.6; max-width: 4rem; font-size: 0.8rem; }
+.key-correct { background: var(--correct); border: 3px solid var(--dark-text); }
+.key-present { background: var(--present); border: 3px dashed var(--dark-text); }
+.key-absent { background: var(--absent); color: var(--text); opacity: 0.7; }
+
+.key:focus-visible, .button:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* Buttons and dialog --------------------------------------------------- */
+.button {
+  padding: 0.6rem 1.4rem;
+  border: 2px solid var(--muted);
+  border-radius: 0.3rem;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.button:hover { background: var(--panel); }
+
+.dialog {
+  padding: 1.6rem 2.2rem;
+  border: 2px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--panel);
+  color: var(--text);
+  text-align: center;
+}
+.dialog::backdrop { background: rgba(0, 0, 0, 0.7); }
+.dialog h2 { margin-top: 0; font-family: Georgia, serif; }
+.dialog p { margin: 0.3rem 0; color: var(--muted); }
+.dialog .dialog-word {
+  margin: 0.2rem 0 1.2rem;
+  color: var(--correct);
+  font-size: 2.2rem;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 26rem) {
+  .tile { width: 3rem; height: 3rem; font-size: 1.5rem; }
+  .key { height: 3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile-correct, .tile-present, .tile-absent { animation: none; }
+}
